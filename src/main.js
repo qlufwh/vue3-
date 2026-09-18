@@ -7,7 +7,6 @@ import router from './router'
 //引入初始化样式文件
 import '@/styles/common.scss'
 
-import '@/styles/com'
 const app = createApp(App)
 
 app.use(createPinia())
