@@ -1,33 +1,29 @@
 <script setup>
+// 引入api
+
+
+import { useCategoryStore } from '@/stores/category'
+const categoryStore = useCategoryStore()
 
 </script>
 
 <template>
-    <header class='app-header'>
+    <header class="app-header">
         <div class="container">
             <h1 class="logo">
                 <RouterLink to="/">小兔鲜</RouterLink>
             </h1>
             <ul class="app-header-nav">
-                <li class="home">
-                    <RouterLink to="/">首页</RouterLink>
-                </li>
-                <li>
-                    <RouterLink to="/">居家</RouterLink>
-                </li>
-                <li>
-                    <RouterLink to="/">美食</RouterLink>
-                </li>
-                <li>
-                    <RouterLink to="/">服饰</RouterLink>
+                <!-- 遍历list中的数据，渲染列表 -->
+                <li class="home" v-for="item in categoryStore.categoryList" :key="item.id">
+                    <RouterLink to="/">{{ item.name }}</RouterLink>
                 </li>
             </ul>
             <div class="search">
                 <i class="iconfont icon-search"></i>
-                <input type="text" placeholder="搜一搜">
+                <input type="text" placeholder="搜一搜" />
             </div>
             <!-- 头部购物车 -->
-
         </div>
     </header>
 </template>
