@@ -1,5 +1,9 @@
+<script setup>
+
+</script>
+
 <template>
-    <div>
-        我是Category
+    <div class='top-category'>
+        我是分类
     </div>
 </template>

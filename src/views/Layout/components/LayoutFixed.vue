@@ -16,7 +16,7 @@ const { categoryList } = storeToRefs(categoryStore)
             <ul class="app-header-nav ">
                 <!-- 遍历list中的数据，渲染列表 -->
                 <li class="home" v-for="item in categoryList" :key="item.id">
-                    <RouterLink to="/">{{ item.name }}</RouterLink>
+                    <RouterLink :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
                 </li>
             </ul>
 
