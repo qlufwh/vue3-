@@ -2,16 +2,15 @@
 import { getBannerAPI } from '@/apis/home';
 import { ref, onMounted } from 'vue';
 
-
 const bannerList = ref([]);
 
+// 不传参时接口默认 distributionSite = '1'，拿首页广告位轮播
 const getBanner = async () => {
     const res = await getBannerAPI();
     bannerList.value = res.result
 }
 
 onMounted(() => getBanner())
-
 </script>
 
 
@@ -20,7 +19,8 @@ onMounted(() => getBanner())
     <div class="home-banner">
         <el-carousel height="500px">
             <el-carousel-item v-for="item in bannerList" :key="item.id">
-                <img v-img-lazy="item.imgUrl" alt="">
+                <!-- 轮播图不要用 v-img-lazy：carousel 有 overflow/位移，懒加载经常判定不在视口，图片会空白 -->
+                <img :src="item.imgUrl" alt="">
             </el-carousel-item>
         </el-carousel>
     </div>

@@ -4,9 +4,15 @@
  * @return {*}
  */
 import httpInstance from '@/utils/http'
-export function getBannerAPI() {
+
+export function getBannerAPI(params = {}) {
+  // distributionSite：1 首页广告位，2 分类商品广告位
+  const { distributionSite = '1' } = params
   return httpInstance({
-    url: 'home/banner',
+    url: '/home/banner',
+    params: {
+      distributionSite,
+    },
   })
 }
 
