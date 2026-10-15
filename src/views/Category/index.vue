@@ -3,15 +3,16 @@ import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { getBannerAPI } from '@/apis/home';
 import { getTopCategoryAPI } from "@/apis/category";
-
+import GoodsItem from "../Home/components/GoodsItem.vue";
+import { onBeforeRouteUpdate } from "vue-router";
 const categoryData = ref({});
 const bannerList = ref([]);
 // setup 中用 useRoute() 拿当前路由，等价于选项式的 this.$route
 const route = useRoute();
 
 // 按路由参数 id 获取当前一级分类数据（面包屑名称等）
-const getCategory = async () => {
-    const res = await getTopCategoryAPI(route.params.id);
+const getCategory = async (id = router.params.id) => {
+    const res = await getTopCategoryAPI(id);
     categoryData.value = res.result;
 };
 
@@ -23,11 +24,15 @@ const getBanner = async () => {
     })
     bannerList.value = res.result
 }
-
 onMounted(() => {
     getCategory();
     getBanner();
 });
+onBeforeRouteUpdate((to) => {
+
+    getCategory(to.params.id);
+})
+
 
 // 头部导航切换 /category/:id 时，组件会被复用，onMounted 不会再次执行
 // 必须监听 id 变化，重新请求分类数据
@@ -51,6 +56,25 @@ watch(() => route.params.id, () => getCategory());
                         <img :src="item.imgUrl" alt="">
                     </el-carousel-item>
                 </el-carousel>
+            </div>
+            <div class="sub-list">
+                <h3>全部分类</h3>
+                <ul>
+                    <li v-for="i in categoryData.children" :key="i.id">
+                        <RouterLink to="/">
+                            <img :src="i.picture" />
+                            <p>{{ i.name }}</p>
+                        </RouterLink>
+                    </li>
+                </ul>
+            </div>
+            <div class="ref-goods" v-for="item in categoryData.children" :key="item.id">
+                <div class="head">
+                    <h3>- {{ item.name }}-</h3>
+                </div>
+                <div class="body">
+                    <GoodsItem v-for="good in item.goods" :goods="good" :key="good.id" />
+                </div>
             </div>
         </div>
     </div>
