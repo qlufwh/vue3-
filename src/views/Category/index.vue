@@ -1,42 +1,10 @@
 <script setup>
-import { ref, onMounted, watch } from "vue";
-import { useRoute } from "vue-router";
-import { getBannerAPI } from '@/apis/home';
-import { getTopCategoryAPI } from "@/apis/category";
 import GoodsItem from "../Home/components/GoodsItem.vue";
-import { onBeforeRouteUpdate } from "vue-router";
-const categoryData = ref({});
-const bannerList = ref([]);
-// setup 中用 useRoute() 拿当前路由，等价于选项式的 this.$route
-const route = useRoute();
+import { useBanner } from "./composables/useBanner";
+import { useCategory } from "./composables/useCategory";
 
-// 按路由参数 id 获取当前一级分类数据（面包屑名称等）
-const getCategory = async (id = router.params.id) => {
-    const res = await getTopCategoryAPI(id);
-    categoryData.value = res.result;
-};
-
-// 分类页轮播：必须传 distributionSite: '2'，否则接口默认 '1' 会返回首页广告
-// 注意：当前测试接口 1 和 2 是同一组图、顺序不同，首张不一样就算生效（Network 里应看到 ?distributionSite=2）
-const getBanner = async () => {
-    const res = await getBannerAPI({
-        distributionSite: '2'
-    })
-    bannerList.value = res.result
-}
-onMounted(() => {
-    getCategory();
-    getBanner();
-});
-onBeforeRouteUpdate((to) => {
-
-    getCategory(to.params.id);
-})
-
-
-// 头部导航切换 /category/:id 时，组件会被复用，onMounted 不会再次执行
-// 必须监听 id 变化，重新请求分类数据
-watch(() => route.params.id, () => getCategory());
+const { bannerList } = useBanner();
+const { categoryData } = useCategory();
 </script>
 
 <template>
